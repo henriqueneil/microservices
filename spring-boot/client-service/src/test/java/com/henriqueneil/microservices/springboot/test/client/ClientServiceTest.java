@@ -5,6 +5,7 @@ import com.henriqueneil.microservices.springboot.client.model.dto.Client;
 import com.henriqueneil.microservices.springboot.client.model.exceptions.ClientNotFoundException;
 import com.henriqueneil.microservices.springboot.client.model.services.ClientService;
 import com.henriqueneil.microservices.springboot.test.config.EmbeddedDatabaseConfig;
+import com.henriqueneil.microservices.springboot.test.fixtures.ClientFixture;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,10 +46,7 @@ public class ClientServiceTest {
     @Test
     public void test_whenAValidClient_thenShouldReturnSuccess() throws Exception {
 
-        Client client = new Client();
-        client.setEmail("email@email.com");
-        client.setName("Client Name");
-
+        Client client = ClientFixture.fixtureClientBasicInsert();
         ClientService service = context.getBean(ClientService.class);
         Client createdClient = service.createClient(client);
         LOGGER.info(String.format("The client was created with id [%s]", createdClient.getId()));
@@ -156,13 +154,16 @@ public class ClientServiceTest {
     @Test
     public void test_whenUpdateAnExistingClient_thenShouldReturnUpdatedClient() throws Exception {
         try {
-            Client client = new Client();
-            client.setId("AADE6A2D-9424-4D83-8F31-5A96D501A4CA");
-            client.setName("Update Client Test 19 Updated");
-            client.setEmail("update@update.com.updated");
+            Client client = ClientFixture.fixtureClientWithValidId();
+            Client oldClient = service.findClientById(client.getId());
 
             Client updatedClient = service.updateClient(client);
-            LOGGER.info("Updated client " + updatedClient.getName());
+            LOGGER.info(String.format("The client name was updated from [%s] to [%s] and the email from [%s] to [%s].",
+                    oldClient.getName(), updatedClient.getName(), oldClient.getEmail(), updatedClient.getEmail()));
+
+            assertEquals(oldClient.getId(), updatedClient.getId());
+            assertNotEquals(oldClient.getName(), updatedClient.getName());
+            assertNotEquals(oldClient.getEmail(), updatedClient.getEmail());
         } catch (ClientNotFoundException clientNotFoundException) {
             LOGGER.error("An exception happened.", clientNotFoundException);
             fail();
@@ -172,10 +173,7 @@ public class ClientServiceTest {
     @Test(expected = ClientNotFoundException.class)
     public void test_whenUpdateANonExistingClient_thenShouldReturnException()
             throws ClientNotFoundException, Exception {
-        Client client = new Client();
-        client.setId("XXX");
-        client.setName("Update Client Test 19 Updated");
-        client.setEmail("update@update.com.updated");
+        Client client = ClientFixture.fixtureClientWithInvalidId();
 
         Client updatedClient = service.updateClient(client);
         LOGGER.info("Updated client " + updatedClient.getName());
