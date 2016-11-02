@@ -43,23 +43,42 @@ public class ClientServiceTest {
         service = context.getBean(ClientService.class);
     }
 
+    /**
+     * Basic insert test.
+     * When: Sending a valid client information.
+     * Then: The client must be inserted in the database.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenAValidClient_thenShouldReturnSuccess() throws Exception {
-
         Client client = ClientFixture.fixtureClientBasicInsert();
         ClientService service = context.getBean(ClientService.class);
         Client createdClient = service.createClient(client);
         LOGGER.info(String.format("The client was created with id [%s]", createdClient.getId()));
     }
 
+    /**
+     * Basic search test using the client id.
+     * Check the file database/scripts/inserts.sql
+     * When: Querying for a client using an existing id.
+     * Then: Should return the client information based on this id.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchUsingExistingId_thenShouldReturnClient() throws Exception {
         Client client = service.findClientById(DEFAULT_CLIENT_ID);
         LOGGER.info(String.format("The client with id [%s] has been found in the database.",
                 client.getId()));
         assertNotNull(client);
+        assertEquals(DEFAULT_CLIENT_ID, client.getId());
+        assertEquals("Client 1", client.getName());
+        assertEquals("client1@contains.com", client.getEmail());
     }
 
+    /**
+     * Basic search test using an non existing client id.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchUsingNonExistingId_thenShouldReturnNull() throws Exception {
         Client client = service.findClientById("Nah");
@@ -67,6 +86,13 @@ public class ClientServiceTest {
         assertNull(client);
     }
 
+    /**
+     * Test case for client search by email that contains a string in any position.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that exists in the email column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailContains_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByEmail("contains.com", CONTAINS);
@@ -74,6 +100,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by email that does not contain a string in any position.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not exist in the email column in the database.
+     * Then: Should return an empty list.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailContainsNonExistingEmail_thenShouldReturnEmptyList() throws Exception {
         List<Client> clientList = service.findClientByEmail("xxx.com", CONTAINS);
@@ -81,6 +114,13 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for client search by email that starts with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that exists in the email column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailStartsWith_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByEmail("startswith", STARTS_WITH);
@@ -88,6 +128,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by email that does not starts with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not start with in the email column in the database.
+     * Then: Should return an empty list.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailStartsWithNinExistingEmail_thenShouldReturnEmptyList() throws Exception {
         List<Client> clientList = service.findClientByEmail("XXX", STARTS_WITH);
@@ -95,6 +142,13 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for client search by email that ends with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that ends with in the email column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailEndsWith_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByEmail("endswith", ENDS_WITH);
@@ -102,6 +156,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by email that does not end with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not end with in the email column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByEmailEndsWithNonExistinEmail_thenShouldReturnEmptyList() throws Exception {
         List<Client> clientList = service.findClientByEmail("XXX", ENDS_WITH);
@@ -109,6 +170,13 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that starts with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that exists in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameStartsWith_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByName("StartsWith", STARTS_WITH);
@@ -116,6 +184,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that does not start with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not start with in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameStartsWithNonExistingName_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByName("XXX", STARTS_WITH);
@@ -123,6 +198,13 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that ends with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that exists in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameEndsWith_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByName("EndsWith", ENDS_WITH);
@@ -130,6 +212,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that does not end with a given string.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not end with in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameEndsWithNonExistingName_thenShouldReturnEmptyList() throws Exception {
         List<Client> clientList = service.findClientByName("XXX", ENDS_WITH);
@@ -137,6 +226,13 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that contains a given string in any position.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that exists in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameContains_thenShouldReturnList() throws Exception {
         List<Client> clientList = service.findClientByName("Contains", CONTAINS);
@@ -144,6 +240,13 @@ public class ClientServiceTest {
         assertEquals(3, clientList.size());
     }
 
+    /**
+     * Test case for client search by name that does not contain a given string in any position.
+     * Check the file database/scripts/inserts.sql
+     * When: Using a string that does not exist in the name column in the database.
+     * Then: Should return a list containing 3 items.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenSearchByNameContainsWithNonExistingName_thenShouldReturnEmptyList() throws Exception {
         List<Client> clientList = service.findClientByName("XXX", CONTAINS);
@@ -151,6 +254,12 @@ public class ClientServiceTest {
         assertEquals(0, clientList.size());
     }
 
+    /**
+     * Test case for updating an existing client in the database.
+     * When: Using a client that exists in the database.
+     * Then: The client should be updated and return the object with updated data.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test
     public void test_whenUpdateAnExistingClient_thenShouldReturnUpdatedClient() throws Exception {
         try {
@@ -170,12 +279,17 @@ public class ClientServiceTest {
         }
     }
 
+    /**
+     * Test case for a failing update client.
+     * When: Trying to update a client using an id that does not exist.
+     * Then: Should thrown an exception of type {@link ClientNotFoundException}
+     * @throws ClientNotFoundException The expected exception.
+     * @throws Exception Any unhandled exception during the test.
+     */
     @Test(expected = ClientNotFoundException.class)
     public void test_whenUpdateANonExistingClient_thenShouldReturnException()
             throws ClientNotFoundException, Exception {
         Client client = ClientFixture.fixtureClientWithInvalidId();
-
-        Client updatedClient = service.updateClient(client);
-        LOGGER.info("Updated client " + updatedClient.getName());
+        service.updateClient(client);
     }
 }
