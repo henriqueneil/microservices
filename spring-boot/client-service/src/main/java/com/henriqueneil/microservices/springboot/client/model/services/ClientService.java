@@ -4,6 +4,8 @@ import com.henriqueneil.microservices.springboot.client.model.dto.Client;
 import com.henriqueneil.microservices.springboot.client.model.enums.StringSearchCriteria;
 import com.henriqueneil.microservices.springboot.client.model.exceptions.ClientNotFoundException;
 import com.henriqueneil.microservices.springboot.client.persistence.interfaces.ClientDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 @Service
 public class ClientService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
+
     @Autowired
     private ClientDao clientDao;
 
@@ -29,8 +33,15 @@ public class ClientService {
     }
 
     @Transactional(propagation = REQUIRED)
-    public Client findClientById(String id) throws Exception {
-        return clientDao.findClientById(id);
+    public Client findClientById(String id) throws ClientNotFoundException, Exception {
+        Client client = clientDao.findClientById(id);
+        if (client == null) {
+            LOGGER.info(
+                    String.format("No client with id [%s] was found and an exception will be thrown.",
+                            id));
+            throw new ClientNotFoundException(id);
+        }
+        return client;
     }
 
     @Transactional(propagation = REQUIRED)
@@ -47,8 +58,23 @@ public class ClientService {
     public Client updateClient(Client client) throws ClientNotFoundException, Exception {
         Client searchClient = findClientById(client.getId());
         if (searchClient == null) {
+            LOGGER.info(
+                    String.format("No client with id [%s] was found and an exception will be thrown.",
+                            client.getId()));
             throw new ClientNotFoundException(client.getId());
         }
         return clientDao.updateClient(client);
+    }
+
+    @Transactional(propagation = REQUIRED)
+    public void deleteClient(String id) throws ClientNotFoundException, Exception {
+        Client client = findClientById(id);
+        if (client == null) {
+            LOGGER.info(
+                    String.format("No client with id [%s] was found and an exception will be thrown.",
+                            id));
+            throw new ClientNotFoundException(client.getId());
+        }
+        clientDao.deleteClient(client);
     }
 }

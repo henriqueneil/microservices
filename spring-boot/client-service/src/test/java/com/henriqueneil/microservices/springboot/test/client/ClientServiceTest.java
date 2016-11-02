@@ -37,6 +37,7 @@ public class ClientServiceTest {
     private ClientService service;
 
     private static final String DEFAULT_CLIENT_ID = "A4268B95-BF1B-41F6-8F53-93C61AC9E34A";
+    private static final String DELETE_CLIENT_ID = "7804B871-626C-40BF-8AA3-459D52CC1331";
 
     @Before
     public void setUpTest() {
@@ -55,6 +56,7 @@ public class ClientServiceTest {
         ClientService service = context.getBean(ClientService.class);
         Client createdClient = service.createClient(client);
         LOGGER.info(String.format("The client was created with id [%s]", createdClient.getId()));
+        assertNotNull(createdClient);
     }
 
     /**
@@ -66,24 +68,28 @@ public class ClientServiceTest {
      */
     @Test
     public void test_whenSearchUsingExistingId_thenShouldReturnClient() throws Exception {
-        Client client = service.findClientById(DEFAULT_CLIENT_ID);
-        LOGGER.info(String.format("The client with id [%s] has been found in the database.",
-                client.getId()));
-        assertNotNull(client);
-        assertEquals(DEFAULT_CLIENT_ID, client.getId());
-        assertEquals("Client 1", client.getName());
-        assertEquals("client1@contains.com", client.getEmail());
+        try {
+            Client client = service.findClientById(DEFAULT_CLIENT_ID);
+            LOGGER.info(String.format("The client with id [%s] has been found in the database.",
+                    client.getId()));
+            assertNotNull(client);
+            assertEquals(DEFAULT_CLIENT_ID, client.getId());
+            assertEquals("Client 1", client.getName());
+            assertEquals("client1@contains.com", client.getEmail());
+        } catch (ClientNotFoundException clientNotFoundException) {
+            LOGGER.info("An exception happened during the test.", clientNotFoundException);
+            fail();
+        }
     }
 
     /**
      * Basic search test using an non existing client id.
+     * @throws ClientNotFoundException Expected exception.
      * @throws Exception Any unhandled exception during the test.
      */
-    @Test
-    public void test_whenSearchUsingNonExistingId_thenShouldReturnNull() throws Exception {
-        Client client = service.findClientById("Nah");
-        LOGGER.info("The client object is " + client);
-        assertNull(client);
+    @Test(expected = ClientNotFoundException.class)
+    public void test_whenSearchUsingNonExistingId_thenShouldReturnException() throws ClientNotFoundException, Exception {
+        service.findClientById("Nah");
     }
 
     /**
@@ -256,6 +262,7 @@ public class ClientServiceTest {
 
     /**
      * Test case for updating an existing client in the database.
+     * Check the file database/scripts/inserts.sql
      * When: Using a client that exists in the database.
      * Then: The client should be updated and return the object with updated data.
      * @throws Exception Any unhandled exception during the test.
@@ -281,6 +288,7 @@ public class ClientServiceTest {
 
     /**
      * Test case for a failing update client.
+     * Check the file database/scripts/inserts.sql
      * When: Trying to update a client using an id that does not exist.
      * Then: Should thrown an exception of type {@link ClientNotFoundException}
      * @throws ClientNotFoundException The expected exception.
@@ -291,5 +299,40 @@ public class ClientServiceTest {
             throws ClientNotFoundException, Exception {
         Client client = ClientFixture.fixtureClientWithInvalidId();
         service.updateClient(client);
+    }
+
+    /**
+     * Test case for successfully deletion of a client.
+     * As the name is unique for unit tests, it will be used as parameter as findById throws an exception case the client does not exist.
+     * Check the file database/scripts/inserts.sql
+     * When: Using an existing client id.
+     * Then: The client should be deleted.
+     * @throws Exception Any unhandled exception during the test.
+     */
+    @Test
+    public void test_whenDeleteAnExistingClient_thenClientShouldBeDeleted() throws Exception {
+        try {
+            String clientName = "Delete Client Test 22";
+            List<Client> listBefore = service.findClientByName(clientName, CONTAINS);
+            service.deleteClient(DELETE_CLIENT_ID);
+            List<Client> listAfter = service.findClientByName(clientName, CONTAINS);
+
+            assertEquals(1, listBefore.size());
+            assertEquals(0, listAfter.size());
+        } catch (ClientNotFoundException clientNotFoundException) {
+            LOGGER.info("An exception happened during the test.", clientNotFoundException);
+            fail();
+        }
+    }
+
+    /**
+     * Test case for client deletion failure scenario.
+     * @throws ClientNotFoundException The expected exception
+     * @throws Exception Any unhandled exception during the test.
+     */
+    @Test(expected = ClientNotFoundException.class)
+    public void test_whenDeleteANonExistingClient_thenShouldThrownAnException()
+            throws ClientNotFoundException, Exception {
+        service.deleteClient("XXX");
     }
 }

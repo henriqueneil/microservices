@@ -85,8 +85,8 @@ public class ClientDaoImpl implements ClientDao {
      * {@inheritDoc}
      */
     @Override
-    public void deleteClient(final String id) throws Exception {
-
+    public void deleteClient(final Client client) throws Exception {
+        getSession().delete(client);
     }
 
     /**

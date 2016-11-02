@@ -53,3 +53,11 @@ INSERT INTO CLIENT (id, name, email)
     VALUES ('268D0E81-F5D7-40DB-A899-1C50D0B95B08', 'Update Client Test 20', 'update@update.com');
 INSERT INTO CLIENT (id, name, email)
     VALUES ('5A49239A-E8CA-46A5-B7D3-2AD419AF32F1', 'Update Client Test 21', 'update@update.com');
+
+-- Test data for deletion
+INSERT INTO CLIENT (id, name, email)
+    VALUES ('7804B871-626C-40BF-8AA3-459D52CC1331', 'Delete Client Test 22', 'delete@delete.com');
+INSERT INTO CLIENT (id, name, email)
+    VALUES ('E5D0015E-50B2-4E5F-8631-B6760274339D', 'Delete Client Test 23', 'delete@delete.com');
+INSERT INTO CLIENT (id, name, email)
+    VALUES ('3EE7A46B-977C-4028-B9AE-4DEC7CBFAC30', 'Delete Client Test 24', 'delete@delete.com');

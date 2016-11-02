@@ -54,9 +54,9 @@ public interface ClientDao {
     List<Client> findClientByEmail(String email, StringSearchCriteria criteria) throws Exception;
 
     /**
-     * Method that delete a client from the database based on a given id.
-     * @param id The client id.
+     * Method that delete a client from the database.
+     * @param client The client object to be deleted..
      * @throws Exception Any exception thrown during the method call.
      */
-    void deleteClient(String id) throws Exception;
+    void deleteClient(Client client) throws Exception;
 }
