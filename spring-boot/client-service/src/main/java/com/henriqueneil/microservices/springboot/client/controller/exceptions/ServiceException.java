@@ -1,7 +1,11 @@
-package com.henriqueneil.microservices.springboot.client.controller.v1.exceptions;
+package com.henriqueneil.microservices.springboot.client.controller.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -12,6 +16,8 @@ import java.io.Serializable;
 @JsonPropertyOrder({"type", "exceptionCode", "exceptionMessage"})
 public class ServiceException implements Serializable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceException.class);
+
     private String type;
     private String exceptionCode;
     private String exceptionMessage;
@@ -20,6 +26,18 @@ public class ServiceException implements Serializable {
         this.type = type;
         this.exceptionCode = exceptionCode;
         this.exceptionMessage = exceptionMessage;
+    }
+
+    @Override
+    public String toString() {
+        String json = "";
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            json = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Error while trying to convert ServiceException to JSON.", e);
+        }
+        return json;
     }
 
     public String getExceptionCode() {

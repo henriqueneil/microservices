@@ -1,0 +1,5 @@
+{
+  "id": "${clientId}",
+  "name": "${clientName}",
+  "email": "${clientEmail}"
+}

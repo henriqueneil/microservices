@@ -1,4 +1,4 @@
-package com.henriqueneil.microservices.springboot.client.controller.v1.exceptions;
+package com.henriqueneil.microservices.springboot.client.controller.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonRootName;

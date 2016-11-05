@@ -6,6 +6,7 @@ import com.henriqueneil.microservices.springboot.client.controller.v1.ClientCont
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,10 +19,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * {@link Application} is the class in charge to start the Spring Boot container.
+ *  - It is very important exclude {@link HibernateJpaAutoConfiguration} from the {@link EnableAutoConfiguration} annotation.
+ * If it is removed a class cast exception occurs during database access.
+ *  - {@link ClientController} sets up the REST service.
+ *  - {@link AppConfig} sets up the basic configurations for the application.
+ *  - {@link DatabaseConfig} sets up the database pool connection.
  */
 @SpringBootApplication
 @EnableSwagger2
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {HibernateJpaAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {ClientController.class, AppConfig.class, DatabaseConfig.class})
 public class Application {
 

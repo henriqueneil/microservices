@@ -10,10 +10,10 @@
         </layout>
     </appender>
 
-    <logger name="com.henriqueneil" level="INFO">
+    <logger name="com.henriqueneil" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
-    <logger name="org.springframework.boot" level="WARN">
+    <logger name="org.springframework.boot" level="WARN" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 

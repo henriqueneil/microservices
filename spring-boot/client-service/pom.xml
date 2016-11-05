@@ -15,7 +15,7 @@
     <properties>
         <spring.version>4.3.3.RELEASE</spring.version>
         <hibernate.version>5.2.3.Final</hibernate.version>
-        <hsqldb.version>2.3.4</hsqldb.version>
+        <h2.version>1.4.193</h2.version>
         <common.dbcp.version>2.1.1</common.dbcp.version>
     </properties>
 
@@ -53,10 +53,9 @@
 
         <!-- Testing dependencies -->
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldb.version}</version>
-            <scope>test</scope>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
         </dependency>
     </dependencies>
 </project>

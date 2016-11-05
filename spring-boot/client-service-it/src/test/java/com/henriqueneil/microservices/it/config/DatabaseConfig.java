@@ -1,4 +1,4 @@
-package com.henriqueneil.microservices.springboot.client.config;
+package com.henriqueneil.microservices.it.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +29,15 @@ public class DatabaseConfig {
 
     @Value("${database.user.password}")
     private String password;
+
+    /**
+     * This method is necessary due to a known issue on Spring Framework that is not able to load the properties from @{@link PropertySource}.
+     * @return PropertySourcesPlaceholderConfigurer
+     */
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfig() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
 
     @Bean(name = "clientDataSource", destroyMethod = "close")
     public BasicDataSource createDataSource() {

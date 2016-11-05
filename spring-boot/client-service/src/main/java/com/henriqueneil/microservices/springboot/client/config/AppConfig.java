@@ -28,7 +28,7 @@ public class AppConfig {
 
     @Bean(name = "clientDao")
     public ClientDao createClientDao() {
-        return ClientDaoImpl.newInstance();
+        return new ClientDaoImpl();
     }
 
     @Bean(name = "clientService")

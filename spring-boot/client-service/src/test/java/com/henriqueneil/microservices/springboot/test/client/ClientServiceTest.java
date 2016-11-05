@@ -48,7 +48,7 @@ public class ClientServiceTest {
      * Basic insert test.
      * When: Sending a valid client information.
      * Then: The client must be inserted in the database.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenAValidClient_thenShouldReturnSuccess() throws Exception {
@@ -64,7 +64,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Querying for a client using an existing id.
      * Then: Should return the client information based on this id.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchUsingExistingId_thenShouldReturnClient() throws Exception {
@@ -85,7 +85,7 @@ public class ClientServiceTest {
     /**
      * Basic search test using an non existing client id.
      * @throws ClientNotFoundException Expected exception.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test(expected = ClientNotFoundException.class)
     public void test_whenSearchUsingNonExistingId_thenShouldReturnException() throws ClientNotFoundException, Exception {
@@ -97,7 +97,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that exists in the email column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailContains_thenShouldReturnList() throws Exception {
@@ -111,7 +111,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not exist in the email column in the database.
      * Then: Should return an empty list.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailContainsNonExistingEmail_thenShouldReturnEmptyList() throws Exception {
@@ -125,7 +125,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that exists in the email column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailStartsWith_thenShouldReturnList() throws Exception {
@@ -139,7 +139,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not start with in the email column in the database.
      * Then: Should return an empty list.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailStartsWithNinExistingEmail_thenShouldReturnEmptyList() throws Exception {
@@ -153,7 +153,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that ends with in the email column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailEndsWith_thenShouldReturnList() throws Exception {
@@ -167,7 +167,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not end with in the email column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByEmailEndsWithNonExistinEmail_thenShouldReturnEmptyList() throws Exception {
@@ -181,7 +181,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that exists in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameStartsWith_thenShouldReturnList() throws Exception {
@@ -195,7 +195,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not start with in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameStartsWithNonExistingName_thenShouldReturnList() throws Exception {
@@ -209,7 +209,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that exists in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameEndsWith_thenShouldReturnList() throws Exception {
@@ -223,7 +223,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not end with in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameEndsWithNonExistingName_thenShouldReturnEmptyList() throws Exception {
@@ -237,7 +237,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that exists in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameContains_thenShouldReturnList() throws Exception {
@@ -251,7 +251,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a string that does not exist in the name column in the database.
      * Then: Should return a list containing 3 items.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenSearchByNameContainsWithNonExistingName_thenShouldReturnEmptyList() throws Exception {
@@ -265,7 +265,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using a client that exists in the database.
      * Then: The client should be updated and return the object with updated data.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenUpdateAnExistingClient_thenShouldReturnUpdatedClient() throws Exception {
@@ -292,7 +292,7 @@ public class ClientServiceTest {
      * When: Trying to update a client using an id that does not exist.
      * Then: Should thrown an exception of type {@link ClientNotFoundException}
      * @throws ClientNotFoundException The expected exception.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test(expected = ClientNotFoundException.class)
     public void test_whenUpdateANonExistingClient_thenShouldReturnException()
@@ -307,7 +307,7 @@ public class ClientServiceTest {
      * Check the file database/scripts/inserts.sql
      * When: Using an existing client id.
      * Then: The client should be deleted.
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test
     public void test_whenDeleteAnExistingClient_thenClientShouldBeDeleted() throws Exception {
@@ -328,7 +328,7 @@ public class ClientServiceTest {
     /**
      * Test case for client deletion failure scenario.
      * @throws ClientNotFoundException The expected exception
-     * @throws Exception Any unhandled exception during the test.
+     * @throws Exception Any unexpected exception during the test.
      */
     @Test(expected = ClientNotFoundException.class)
     public void test_whenDeleteANonExistingClient_thenShouldThrownAnException()

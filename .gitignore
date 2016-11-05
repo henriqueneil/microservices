@@ -1,3 +1,5 @@
 .idea
 *.iml
 spring-boot/client-service/target
+spring-boot/client-service-it/target
+spring-boot/client-service-it/test-output/citrus-reports

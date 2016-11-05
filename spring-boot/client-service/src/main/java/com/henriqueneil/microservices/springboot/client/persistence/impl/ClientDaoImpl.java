@@ -30,14 +30,6 @@ public class ClientDaoImpl implements ClientDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private ClientDaoImpl() {
-
-    }
-
-    public static ClientDao newInstance() {
-        return new ClientDaoImpl();
-    }
-
     /**
      * {@inheritDoc}
      */
