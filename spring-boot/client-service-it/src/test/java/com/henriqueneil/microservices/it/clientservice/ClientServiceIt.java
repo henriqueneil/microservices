@@ -69,6 +69,10 @@ public class ClientServiceIt extends TestNGCitrusTestDesigner {
         variable(VARIABLE_CLIENT_NAME, "Client Insert Test 001");
         variable(VARIABLE_CLIENT_EMAIL, email);
 
+        query(clientDataSource)
+                .statement(String.format(queryCountClientByEmail, email))
+                .validate(FIELD_COUNTER, "0");
+
         http().client(httpCreateClient).send()
                 .post()
                 .contentType(CONTENT_TYPE_APPLICATION_JSON)

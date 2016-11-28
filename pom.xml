@@ -19,6 +19,7 @@
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.plugin>3.5.1</maven.compiler.plugin>
+        <cobertura.plugin>2.7</cobertura.plugin>
     </properties>
 
     <build>
@@ -33,6 +34,36 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!-- Cobertura Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+            </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!-- Cobertura Plugin -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>${cobertura.plugin}</version>
+                    <configuration>
+                        <formats>
+                            <format>html</format>
+                        </formats>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+
 </project>

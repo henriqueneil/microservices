@@ -129,6 +129,7 @@ public class ClientDaoImpl implements ClientDao {
 
             Predicate predicate = builder.like(rootClient.get(field), value);
             criteriaQuery.where(builder.and(predicate));
+            LOGGER.info(String.format("Added the predicate like for field [%s] with value [%s].", field, value));
 
             return getSession().createQuery(criteriaQuery).getResultList();
         } catch (Exception exception) {

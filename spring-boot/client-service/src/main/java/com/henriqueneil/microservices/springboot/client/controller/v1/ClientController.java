@@ -3,6 +3,7 @@ package com.henriqueneil.microservices.springboot.client.controller.v1;
 import com.henriqueneil.microservices.springboot.client.controller.exceptions.BusinessException;
 import com.henriqueneil.microservices.springboot.client.controller.exceptions.ServiceException;
 import com.henriqueneil.microservices.springboot.client.model.dto.Client;
+import com.henriqueneil.microservices.springboot.client.model.enums.StringSearchCriteria;
 import com.henriqueneil.microservices.springboot.client.model.exceptions.ClientNotFoundException;
 import com.henriqueneil.microservices.springboot.client.model.services.ClientService;
 import com.henriqueneil.microservices.springboot.client.model.util.JsonUtils;
@@ -13,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link ClientController} is the class in charge to control all the request for the Client Entity.
@@ -139,5 +143,45 @@ public class ClientController {
                             "SE01", exception.getMessage());
             return serviceException.toString();
         }
+    }
+
+    @ApiOperation(value = "Operation that finds a client by email or name and based on an search criteria.",
+            nickname = "Find Client",
+            response = Client.class)
+    @RequestMapping(method = RequestMethod.GET, path = "/client-services/V1/find/{findBy}/{searchCriteria}/{value:.+}",
+            produces = "application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Query performed successfully!", response = Client.class),
+            @ApiResponse(code = 201, message = "The request was received but there is business error",
+                    response = BusinessException.class),
+            @ApiResponse(code = 500, message = "Failure", response = ServiceException.class)})
+    public String findClientBy(@PathVariable String findBy,
+                               @PathVariable String searchCriteria,
+                               @PathVariable String value) {
+
+                StringSearchCriteria criteria = StringSearchCriteria.getCriteria(searchCriteria);
+                List<Client> clients = new ArrayList<>();
+                try {
+                    if ("name".equalsIgnoreCase(findBy)) {
+                        LOGGER.info(String.format("Searching for client based on name [%s] and criteria [%s]...",
+                                value, criteria.getValue()));
+                        clients.addAll(clientService.findClientByName(value, criteria));
+                    } else if ("email".equalsIgnoreCase(findBy)) {
+                        LOGGER.info(String.format("Searching for client based on email [%s] and criteria [%s]...",
+                                value, criteria.getValue()));
+                        clients.addAll(clientService.findClientByEmail(value, criteria));
+                    } else {
+                        LOGGER.info(String
+                                .format("No valid search type was found using the values [%s] for findBy and [%s] for searchType.",
+                                    findBy, searchCriteria));
+                    }
+                } catch (Exception exception) {
+                    LOGGER.error("An exception happened.", exception);
+                    ServiceException serviceException =
+                            new ServiceException(exception.getClass().getCanonicalName(),
+                                    "SE01", exception.getMessage());
+                    return serviceException.toString();
+                }
+        return JsonUtils.fromObjectToJson(clients);
     }
 }
